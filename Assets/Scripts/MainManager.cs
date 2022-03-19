@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainManager : MonoBehaviour
 {
-    public Text text;
+  
+
+public TextMeshProUGUI textMesh;
     public Brick BrickPrefab;
     public int LineCount = 6;
     public Rigidbody Ball;
@@ -21,9 +24,11 @@ public class MainManager : MonoBehaviour
 
     
     // Start is called before the first frame update
+   
     void Start()
     {
-        text.text = "Name : " + DataManager.Instance.playerName;
+      
+        textMesh.text = $"Best Score : {DataManager.Instance.highestScore}      Player : {DataManager.Instance.highestScorePlayer}";
 
 
         const float step = 0.6f;
@@ -43,7 +48,7 @@ public class MainManager : MonoBehaviour
     }
 
     private void Update()
-    {
+    { 
         if (!m_Started)
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -76,5 +81,13 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+       if(m_Points > DataManager.Instance.highestScore)
+        {
+            DataManager.Instance.highestScore = m_Points;
+            DataManager.Instance.highestScorePlayer = DataManager.Instance.playerName;
+            DataManager.Instance.SaveHighest();
+        }
+
+       
     }
 }
